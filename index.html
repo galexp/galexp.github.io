@@ -13,7 +13,7 @@ function convertCurrency(amount, fromCurrency, toCurrency, cb) {
   toCurrency = encodeURIComponent(toCurrency);
   var query = fromCurrency + '_' + toCurrency;
 
-  var url = 'https://www.currencyconverterapi.com/api/v3/convert?q=USD_PHP,PHP_USD&compact=ultra&apiKey=YOUR_API_KEY;
+  var url = 'https://www.currencyconverterapi.com/api/v3/convert?q=USD_PHP,PHP_USD&compact=ultra&apiKey=YOUR_API_KEY';
 
   https.get(url, function(res){
       var body = '';
