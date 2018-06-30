@@ -3,7 +3,7 @@
   <head>
   <title>Service Worker</title>
      <script type="text/javascript">
-       alert("Look up");
+       //alert("Look up");
        var https = require('https');
 
 function convertCurrency(amount, fromCurrency, toCurrency, cb) {
@@ -13,7 +13,7 @@ function convertCurrency(amount, fromCurrency, toCurrency, cb) {
   toCurrency = encodeURIComponent(toCurrency);
   var query = fromCurrency + '_' + toCurrency;
 
-  var url = 'https://www.currencyconverterapi.com/api/v5/convert?q='+ query + '&compact=ultra&apiKey=' + apiKey;
+  var url = '/api/v5/convert?q=USD_PHP,PHP_USD&compact=ultra;
 
   https.get(url, function(res){
       var body = '';
