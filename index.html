@@ -12,7 +12,7 @@
  
 
 
-  <script>
+  <script type="text/javascript" >
  
 
 var https = require('https');
@@ -53,27 +53,4 @@ function convertCurrency(amount, fromCurrency, toCurrency, cb) {
             cb(e);
           }
       });
-  }).on('error', function(e){
-        console.log("Got an error: ", e);
-        cb(e);
-  });
-}
-
-//uncomment to test
-
-convertCurrency(10, 'USD', 'PHP', function(err, amount) {
-  console.log(amount);
-});
-
-</script>
-
-</script>
-
-</head>
-<body>
-      
-      
- 
-
-</body>
-</html>
+  }).on('
