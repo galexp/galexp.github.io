@@ -10,14 +10,14 @@
   <meta http-equiv="content-language" content="en" />
   <meta name="author" lang="en" content="Manny Vergel" />
   <meta name="copyright" lang="en" content="2013" />
-  <meta name="description" content="" /> 
-  <meta name="keywords" content="" />
+  <meta name="description" content="Free Currency Converter API offers free web services for developers to convert one currency to another. Conversion is updated every 60 minutes which can be upgraded to premium options available in different packages." /> 
+  <meta name="keywords" content="currency exchange rates, foreign exchange, currency converter, free, api, web service" />
    
   
   <meta name="robots" content="all,follow" />
   <!-- Set the viewport width to device width for mobile -->
   <meta name="viewport" content="width=device-width" />
-  <title>Documentation | Currency Converter API</title>
+  <title>Currency Conversion Tool For Devs | Free Currency Converter API</title>
 
   <link href='https://plus.google.com/109927246636590264942' rel='author'/>
 
@@ -31,6 +31,61 @@
   
   
   
+<script src="/js/numeral.min.js"></script>
+<style>
+.feature-box {
+  text-align: center;
+  width: 400px;
+}
+
+.feature-box .title {
+  font-size: 1.2em;
+  font-weight: normal;
+  margin-bottom: 6px;
+}
+
+.feature-box .desc {
+  
+}
+</style>
+<script>
+var addthis_share = {
+    url: "https://free.currencyconverterapi.com"
+}
+
+function getCurrencyUsingJQuery() {
+  var currVal = $("#CURR_VAL");
+  currVal.val("");
+
+  var currFrSelect = $("#CURR_FR");
+  var fr = currFrSelect.val();
+
+  var currToSelect = $("#CURR_TO");
+  var to = currToSelect.val();
+
+
+  var currId = fr + "_" + to;
+  var protocol = window.location.protocol.replace(/:/g,'');
+
+  currVal.attr("placeholder", "Converting...");
+  $.getJSON(protocol + "://free.currencyconverterapi.com/api/v5/convert?q=" + currId + "&compact=y&callback=?",
+    function(data){
+      try {
+       var currFrVal = parseFloat(document.getElementById("CURR_FR_VAL").value);
+       currVal.val(numeral(currFrVal * data[currId].val).format("0,0.00[0]"));
+
+     } catch (e) {
+      alert("Please enter a number in the Amount field.");
+    }
+
+    currVal.attr("placeholder", "Press Convert button");
+
+  });
+
+}
+
+
+</script>
 
 </head>
 <body>
@@ -52,21 +107,23 @@
 <div class="top-header">
   <div class="row">
   <div class="large-12 columns">
-   <ul class="menu">
-  <li><a href="/">Home</a></li>
-   <li><a href="/docs">Documentation</a></li>
+   
+<ul class="menu">
+  <li><a href="https://www.currencyconverterapi.com">Home</a></li>
+   <li><a href="https://www.currencyconverterapi.com/docs">Documentation</a></li>
    <li><a href="https://free.currencyconverterapi.com">Free Version</a></li>
-   <li><a href="/pricing">Pricing</a></li>
+   <li><a href="https://www.currencyconverterapi.com/pricing">Pricing</a></li>
    <li><a href="https://blog.currencyconverterapi.com">Blog</a></li>
-  <li><a href="/contact">Contact &amp; Support</a></li>
+  <li><a href="https://www.currencyconverterapi.com/contact">Contact &amp; Support</a></li>
   
 
 
    <li>|</li>
    
-   <li><a href="/login">Login</a></li>
+   <li><a href="https://www.currencyconverterapi.com/dev">Login</a></li>
    
 </ul>
+
   
   </div>
   </div>
@@ -78,117 +135,794 @@
 
 
 
+  <div class="row">
+     <div class="large-12 columns">
+     <div data-alert class="alert-box radius">
+      API version 5 has been released (Support for historical date range).
+      <a href="#" class="close">&times;</a>
+    </div>
+    </div>
+  </div>
+
 
 
 <div class="row">
   <div class="large-12 columns">
 
 
-<h1>Documentation for the Premium Version</h1>
-
-<p>** For the free version, you don't need to specify an API Key.</p>
-
-<h4 id="ultra-compact-multiple-queries-">Ultra compact, multiple queries.</h4>
-<pre><code>/api/v5/convert?q=USD_PHP,PHP_USD&amp;compact=ultra&amp;apiKey=[YOUR_API_KEY]
-</code></pre><p>Sample output:</p>
-<pre><code>{
-  &quot;USD_PHP&quot;: 46.211,
-  &quot;PHP_USD&quot;: 0.02163987
-}
-</code></pre><h4 id="jsonp-support">JSONP Support</h4>
-<pre><code>/api/v5/convert?q=USD_PHP,PHP_USD&amp;compact=ultra&amp;callback=sampleCallback&amp;apiKey=[YOUR_API_KEY]
-</code></pre><h4 id="list-of-currencies">List of currencies</h4>
-<pre><code>/api/v5/currencies?apiKey=[YOUR_API_KEY]
-</code></pre><h4 id="list-of-countries">List of countries</h4>
-<pre><code>/api/v5/countries?apiKey=[YOUR_API_KEY]
-</code></pre><h4 id="historical-data-experimental-single-date-">Historical Data (Experimental, Single Date)</h4>
-<pre><code>/api/v5/convert?q=USD_PHP,PHP_USD&amp;compact=ultra&amp;date=[yyyy-mm-dd]&amp;apiKey=[YOUR_API_KEY]
-</code></pre><h4 id="historical-data-experimental-date-range-">Historical Data (Experimental, Date Range)</h4>
-<p>Maximum of 365 days</p>
-<pre><code>/api/v5/convert?q=USD_PHP,PHP_USD&amp;compact=ultra&amp;date=[yyyy-mm-dd]&amp;endDate=[yyyy-mm-dd]&amp;apiKey=[YOUR_API_KEY]
-</code></pre><h4 id="usage">Usage</h4>
-<p>Returns your current API usage</p>
-<pre><code>/others/usage?apiKey=[YOUR_API_KEY]
-</code></pre><h2 id="sample-codes">Sample Codes</h2>
-<h4 id="php">PHP</h4>
-<pre><code>&lt;?php
-function convertCurrency($amount,$from_currency,$to_currency){
-  $apikey = &#39;your-api-key-here&#39;;
-
-  $from_Currency = urlencode($from_currency);
-  $to_Currency = urlencode($to_currency);
-  $query =  &quot;{$from_Currency}_{$to_Currency}&quot;;
-
-  $json = file_get_contents(&quot;https://www.currencyconverterapi.com/api/v5/convert?q={$query}&amp;compact=ultra&amp;apiKey={$apikey}&quot;);
-  $obj = json_decode($json, true);
-
-  $val = floatval($obj[&quot;$query&quot;]);
-
-
-  $total = $val * $amount;
-  return number_format($total, 2, &#39;.&#39;, &#39;&#39;);
-}
-
-//uncomment to test
-//echo convertCurrency(10, &#39;USD&#39;, &#39;PHP&#39;);
-?&gt;
-</code></pre><h4 id="node-js-javascript">Node JS / Javascript</h4>
-<pre><code>var https = require(&#39;https&#39;);
-
-function convertCurrency(amount, fromCurrency, toCurrency, cb) {
-  var apiKey = &#39;your-api-key-here&#39;;
-
-  fromCurrency = encodeURIComponent(fromCurrency);
-  toCurrency = encodeURIComponent(toCurrency);
-  var query = fromCurrency + &#39;_&#39; + toCurrency;
-
-  var url = &#39;https://www.currencyconverterapi.com/api/v5/convert?q=&#39;
-            + query + &#39;&amp;compact=ultra&amp;apiKey=&#39; + apiKey;
-
-  https.get(url, function(res){
-      var body = &#39;&#39;;
-
-      res.on(&#39;data&#39;, function(chunk){
-          body += chunk;
-      });
-
-      res.on(&#39;end&#39;, function(){
-          try {
-            var jsonObj = JSON.parse(body);
-
-            var val = jsonObj[query];
-            if (val) {
-              var total = val * amount;
-              cb(null, Math.round(total * 100) / 100);
-            } else {
-              var err = new Error(&quot;Value not found for &quot; + query);
-              console.log(err);
-              cb(err);
-            }
-          } catch(e) {
-            console.log(&quot;Parse error: &quot;, e);
-            cb(e);
-          }
-      });
-  }).on(&#39;error&#39;, function(e){
-        console.log(&quot;Got an error: &quot;, e);
-        cb(e);
-  });
-}
-
-//uncomment to test
-/*
-convertCurrency(10, &#39;USD&#39;, &#39;PHP&#39;, function(err, amount) {
-  console.log(amount);
-});
-*/
-</code></pre>
-
+<h1>The Free Currency Converter API</h1>
+<div style="height: 40px;">
+<!-- AddThis Button BEGIN -->
+<div class="addthis_toolbox addthis_default_style addthis_32x32_style">
+<a class="addthis_button_preferred_1"></a>
+<a class="addthis_button_preferred_2"></a>
+<a class="addthis_button_preferred_3"></a>
+<a class="addthis_button_preferred_4"></a>
+<a class="addthis_button_compact"></a>
+<a class="addthis_counter addthis_bubble_style"></a>
+</div>
+<!-- AddThis Button END -->
+</div>
+<br/>
 <p>
-Please note that the services here are provided as is and without warranty (See <a href="/terms-of-service">Terms of Service</a>). You only pay for the cost of the server. But I will try to help to the best of my ability if you need any support. 
+  Convert one currency to another that returns result in json format.
 </p>
- 
-<p>If you have inquiries, please feel free to <a href="/contact">contact</a> me.</p>
+
+<p>Quick API Sample (JSON and JSONP support):</p>
+
+<p>Examples now use version 5 of the API. Added currency symbols to currencies and countries, minor fixes.</p>
+
+
+<!--
+<div id="myDiv"></div>
+<script>loadXMLDoc();</script>
+<p>
+  Quick Start:
+</p>
+-->
+
+<ul>
+  <li><a href="/api/v5/convert?q=USD_PHP&amp;compact=y">Compact output sample</a></li>
+  <li><a href="/api/v5/convert?q=USD_PHP&amp;compact=y&amp;callback=sampleCallback">JSONP support</a></li>
+  <li><a href="/api/v5/convert?q=USD_PHP&amp;compact=ultra">Ultra compact output sample</a></li>
+  <li><a href="/api/v5/convert?q=USD_PHP,PHP_USD">Multiple queries, and non-compact sample</a> (Max of 2 queries for the free version)</li>
+  <li><a href="/api/v5/currencies">List of all currencies</a></li>
+  <li><a href="/api/v5/countries">List of countries</a></li>
+  <li><a href="/api/v5/convert?q=USD_PHP,PHP_USD&compact=ultra&date=2017-12-31">Historical Data (Experimental, Single Date)</a></li>
+  
+  
+  <li><a href="/api/v5/convert?q=USD_PHP,PHP_USD&compact=ultra&date=2018-03-24&endDate=2018-03-29">Historical Data (Experimental, Date Range)</a></li>
+</ul>
+
+<p>Try it:</p>
+
+<div class="row">
+
+<div class="medium-6 columns">
+  <div class="row collapse">
+    <div class="medium-3 columns">
+      <input type="text" value="1" name="CURR_FR_VAL" id="CURR_FR_VAL" placeholder="Enter amount" />
+    </div>
+    <div class="medium-3 columns">
+      <select id="CURR_FR" class="postfix">
+        
+        <option value="AED" >AED</option>
+        
+        <option value="AFN" >AFN</option>
+        
+        <option value="ALL" >ALL</option>
+        
+        <option value="AMD" >AMD</option>
+        
+        <option value="ANG" >ANG</option>
+        
+        <option value="AOA" >AOA</option>
+        
+        <option value="ARS" >ARS</option>
+        
+        <option value="AUD" >AUD</option>
+        
+        <option value="AWG" >AWG</option>
+        
+        <option value="AZN" >AZN</option>
+        
+        <option value="BAM" >BAM</option>
+        
+        <option value="BBD" >BBD</option>
+        
+        <option value="BDT" >BDT</option>
+        
+        <option value="BGN" >BGN</option>
+        
+        <option value="BHD" >BHD</option>
+        
+        <option value="BIF" >BIF</option>
+        
+        <option value="BND" >BND</option>
+        
+        <option value="BOB" >BOB</option>
+        
+        <option value="BRL" >BRL</option>
+        
+        <option value="BSD" >BSD</option>
+        
+        <option value="BTC" >BTC</option>
+        
+        <option value="BTN" >BTN</option>
+        
+        <option value="BWP" >BWP</option>
+        
+        <option value="BYN" >BYN</option>
+        
+        <option value="BYR" >BYR</option>
+        
+        <option value="BZD" >BZD</option>
+        
+        <option value="CAD" >CAD</option>
+        
+        <option value="CDF" >CDF</option>
+        
+        <option value="CHF" >CHF</option>
+        
+        <option value="CLP" >CLP</option>
+        
+        <option value="CNY" >CNY</option>
+        
+        <option value="COP" >COP</option>
+        
+        <option value="CRC" >CRC</option>
+        
+        <option value="CUP" >CUP</option>
+        
+        <option value="CVE" >CVE</option>
+        
+        <option value="CZK" >CZK</option>
+        
+        <option value="DJF" >DJF</option>
+        
+        <option value="DKK" >DKK</option>
+        
+        <option value="DOP" >DOP</option>
+        
+        <option value="DZD" >DZD</option>
+        
+        <option value="EGP" >EGP</option>
+        
+        <option value="ERN" >ERN</option>
+        
+        <option value="ETB" >ETB</option>
+        
+        <option value="EUR" >EUR</option>
+        
+        <option value="FJD" >FJD</option>
+        
+        <option value="FKP" >FKP</option>
+        
+        <option value="GBP" >GBP</option>
+        
+        <option value="GEL" >GEL</option>
+        
+        <option value="GHS" >GHS</option>
+        
+        <option value="GIP" >GIP</option>
+        
+        <option value="GMD" >GMD</option>
+        
+        <option value="GNF" >GNF</option>
+        
+        <option value="GTQ" >GTQ</option>
+        
+        <option value="GYD" >GYD</option>
+        
+        <option value="HKD" >HKD</option>
+        
+        <option value="HNL" >HNL</option>
+        
+        <option value="HRK" >HRK</option>
+        
+        <option value="HTG" >HTG</option>
+        
+        <option value="HUF" >HUF</option>
+        
+        <option value="IDR" >IDR</option>
+        
+        <option value="ILS" >ILS</option>
+        
+        <option value="INR" >INR</option>
+        
+        <option value="IQD" >IQD</option>
+        
+        <option value="IRR" >IRR</option>
+        
+        <option value="ISK" >ISK</option>
+        
+        <option value="JMD" >JMD</option>
+        
+        <option value="JOD" >JOD</option>
+        
+        <option value="JPY" >JPY</option>
+        
+        <option value="KES" >KES</option>
+        
+        <option value="KGS" >KGS</option>
+        
+        <option value="KHR" >KHR</option>
+        
+        <option value="KMF" >KMF</option>
+        
+        <option value="KPW" >KPW</option>
+        
+        <option value="KRW" >KRW</option>
+        
+        <option value="KWD" >KWD</option>
+        
+        <option value="KYD" >KYD</option>
+        
+        <option value="KZT" >KZT</option>
+        
+        <option value="LAK" >LAK</option>
+        
+        <option value="LBP" >LBP</option>
+        
+        <option value="LKR" >LKR</option>
+        
+        <option value="LRD" >LRD</option>
+        
+        <option value="LSL" >LSL</option>
+        
+        <option value="LVL" >LVL</option>
+        
+        <option value="LYD" >LYD</option>
+        
+        <option value="MAD" >MAD</option>
+        
+        <option value="MDL" >MDL</option>
+        
+        <option value="MGA" >MGA</option>
+        
+        <option value="MKD" >MKD</option>
+        
+        <option value="MMK" >MMK</option>
+        
+        <option value="MNT" >MNT</option>
+        
+        <option value="MOP" >MOP</option>
+        
+        <option value="MRO" >MRO</option>
+        
+        <option value="MUR" >MUR</option>
+        
+        <option value="MVR" >MVR</option>
+        
+        <option value="MWK" >MWK</option>
+        
+        <option value="MXN" >MXN</option>
+        
+        <option value="MYR" >MYR</option>
+        
+        <option value="MZN" >MZN</option>
+        
+        <option value="NAD" >NAD</option>
+        
+        <option value="NGN" >NGN</option>
+        
+        <option value="NIO" >NIO</option>
+        
+        <option value="NOK" >NOK</option>
+        
+        <option value="NPR" >NPR</option>
+        
+        <option value="NZD" >NZD</option>
+        
+        <option value="OMR" >OMR</option>
+        
+        <option value="PAB" >PAB</option>
+        
+        <option value="PEN" >PEN</option>
+        
+        <option value="PGK" >PGK</option>
+        
+        <option value="PHP" >PHP</option>
+        
+        <option value="PKR" >PKR</option>
+        
+        <option value="PLN" >PLN</option>
+        
+        <option value="PYG" >PYG</option>
+        
+        <option value="QAR" >QAR</option>
+        
+        <option value="RON" >RON</option>
+        
+        <option value="RSD" >RSD</option>
+        
+        <option value="RUB" >RUB</option>
+        
+        <option value="RWF" >RWF</option>
+        
+        <option value="SAR" >SAR</option>
+        
+        <option value="SBD" >SBD</option>
+        
+        <option value="SCR" >SCR</option>
+        
+        <option value="SDG" >SDG</option>
+        
+        <option value="SEK" >SEK</option>
+        
+        <option value="SGD" >SGD</option>
+        
+        <option value="SHP" >SHP</option>
+        
+        <option value="SLL" >SLL</option>
+        
+        <option value="SOS" >SOS</option>
+        
+        <option value="SRD" >SRD</option>
+        
+        <option value="STD" >STD</option>
+        
+        <option value="SYP" >SYP</option>
+        
+        <option value="SZL" >SZL</option>
+        
+        <option value="THB" >THB</option>
+        
+        <option value="TJS" >TJS</option>
+        
+        <option value="TMT" >TMT</option>
+        
+        <option value="TND" >TND</option>
+        
+        <option value="TOP" >TOP</option>
+        
+        <option value="TRY" >TRY</option>
+        
+        <option value="TTD" >TTD</option>
+        
+        <option value="TWD" >TWD</option>
+        
+        <option value="TZS" >TZS</option>
+        
+        <option value="UAH" >UAH</option>
+        
+        <option value="UGX" >UGX</option>
+        
+        <option value="USD" selected>USD</option>
+        
+        <option value="UYU" >UYU</option>
+        
+        <option value="UZS" >UZS</option>
+        
+        <option value="VEF" >VEF</option>
+        
+        <option value="VND" >VND</option>
+        
+        <option value="VUV" >VUV</option>
+        
+        <option value="WST" >WST</option>
+        
+        <option value="XAF" >XAF</option>
+        
+        <option value="XCD" >XCD</option>
+        
+        <option value="XDR" >XDR</option>
+        
+        <option value="XOF" >XOF</option>
+        
+        <option value="XPF" >XPF</option>
+        
+        <option value="YER" >YER</option>
+        
+        <option value="ZAR" >ZAR</option>
+        
+        <option value="ZMW" >ZMW</option>
+        
+      </select>
+    </div>
+    <div class="medium-3 columns" style="text-align: center;">
+      <span class="postfix">to</span>
+    </div>
+    <div class="medium-3 columns">
+      <select id="CURR_TO" class="postfix">
+        
+        <option value="AED" >AED</option>
+        
+        <option value="AFN" >AFN</option>
+        
+        <option value="ALL" >ALL</option>
+        
+        <option value="AMD" >AMD</option>
+        
+        <option value="ANG" >ANG</option>
+        
+        <option value="AOA" >AOA</option>
+        
+        <option value="ARS" >ARS</option>
+        
+        <option value="AUD" >AUD</option>
+        
+        <option value="AWG" >AWG</option>
+        
+        <option value="AZN" >AZN</option>
+        
+        <option value="BAM" >BAM</option>
+        
+        <option value="BBD" >BBD</option>
+        
+        <option value="BDT" >BDT</option>
+        
+        <option value="BGN" >BGN</option>
+        
+        <option value="BHD" >BHD</option>
+        
+        <option value="BIF" >BIF</option>
+        
+        <option value="BND" >BND</option>
+        
+        <option value="BOB" >BOB</option>
+        
+        <option value="BRL" >BRL</option>
+        
+        <option value="BSD" >BSD</option>
+        
+        <option value="BTC" >BTC</option>
+        
+        <option value="BTN" >BTN</option>
+        
+        <option value="BWP" >BWP</option>
+        
+        <option value="BYN" >BYN</option>
+        
+        <option value="BYR" >BYR</option>
+        
+        <option value="BZD" >BZD</option>
+        
+        <option value="CAD" >CAD</option>
+        
+        <option value="CDF" >CDF</option>
+        
+        <option value="CHF" >CHF</option>
+        
+        <option value="CLP" >CLP</option>
+        
+        <option value="CNY" >CNY</option>
+        
+        <option value="COP" >COP</option>
+        
+        <option value="CRC" >CRC</option>
+        
+        <option value="CUP" >CUP</option>
+        
+        <option value="CVE" >CVE</option>
+        
+        <option value="CZK" >CZK</option>
+        
+        <option value="DJF" >DJF</option>
+        
+        <option value="DKK" >DKK</option>
+        
+        <option value="DOP" >DOP</option>
+        
+        <option value="DZD" >DZD</option>
+        
+        <option value="EGP" >EGP</option>
+        
+        <option value="ERN" >ERN</option>
+        
+        <option value="ETB" >ETB</option>
+        
+        <option value="EUR" >EUR</option>
+        
+        <option value="FJD" >FJD</option>
+        
+        <option value="FKP" >FKP</option>
+        
+        <option value="GBP" >GBP</option>
+        
+        <option value="GEL" >GEL</option>
+        
+        <option value="GHS" >GHS</option>
+        
+        <option value="GIP" >GIP</option>
+        
+        <option value="GMD" >GMD</option>
+        
+        <option value="GNF" >GNF</option>
+        
+        <option value="GTQ" >GTQ</option>
+        
+        <option value="GYD" >GYD</option>
+        
+        <option value="HKD" >HKD</option>
+        
+        <option value="HNL" >HNL</option>
+        
+        <option value="HRK" >HRK</option>
+        
+        <option value="HTG" >HTG</option>
+        
+        <option value="HUF" >HUF</option>
+        
+        <option value="IDR" >IDR</option>
+        
+        <option value="ILS" >ILS</option>
+        
+        <option value="INR" >INR</option>
+        
+        <option value="IQD" >IQD</option>
+        
+        <option value="IRR" >IRR</option>
+        
+        <option value="ISK" >ISK</option>
+        
+        <option value="JMD" >JMD</option>
+        
+        <option value="JOD" >JOD</option>
+        
+        <option value="JPY" >JPY</option>
+        
+        <option value="KES" >KES</option>
+        
+        <option value="KGS" >KGS</option>
+        
+        <option value="KHR" >KHR</option>
+        
+        <option value="KMF" >KMF</option>
+        
+        <option value="KPW" >KPW</option>
+        
+        <option value="KRW" >KRW</option>
+        
+        <option value="KWD" >KWD</option>
+        
+        <option value="KYD" >KYD</option>
+        
+        <option value="KZT" >KZT</option>
+        
+        <option value="LAK" >LAK</option>
+        
+        <option value="LBP" >LBP</option>
+        
+        <option value="LKR" >LKR</option>
+        
+        <option value="LRD" >LRD</option>
+        
+        <option value="LSL" >LSL</option>
+        
+        <option value="LVL" >LVL</option>
+        
+        <option value="LYD" >LYD</option>
+        
+        <option value="MAD" >MAD</option>
+        
+        <option value="MDL" >MDL</option>
+        
+        <option value="MGA" >MGA</option>
+        
+        <option value="MKD" >MKD</option>
+        
+        <option value="MMK" >MMK</option>
+        
+        <option value="MNT" >MNT</option>
+        
+        <option value="MOP" >MOP</option>
+        
+        <option value="MRO" >MRO</option>
+        
+        <option value="MUR" >MUR</option>
+        
+        <option value="MVR" >MVR</option>
+        
+        <option value="MWK" >MWK</option>
+        
+        <option value="MXN" >MXN</option>
+        
+        <option value="MYR" >MYR</option>
+        
+        <option value="MZN" >MZN</option>
+        
+        <option value="NAD" >NAD</option>
+        
+        <option value="NGN" >NGN</option>
+        
+        <option value="NIO" >NIO</option>
+        
+        <option value="NOK" >NOK</option>
+        
+        <option value="NPR" >NPR</option>
+        
+        <option value="NZD" >NZD</option>
+        
+        <option value="OMR" >OMR</option>
+        
+        <option value="PAB" >PAB</option>
+        
+        <option value="PEN" >PEN</option>
+        
+        <option value="PGK" >PGK</option>
+        
+        <option value="PHP" selected>PHP</option>
+        
+        <option value="PKR" >PKR</option>
+        
+        <option value="PLN" >PLN</option>
+        
+        <option value="PYG" >PYG</option>
+        
+        <option value="QAR" >QAR</option>
+        
+        <option value="RON" >RON</option>
+        
+        <option value="RSD" >RSD</option>
+        
+        <option value="RUB" >RUB</option>
+        
+        <option value="RWF" >RWF</option>
+        
+        <option value="SAR" >SAR</option>
+        
+        <option value="SBD" >SBD</option>
+        
+        <option value="SCR" >SCR</option>
+        
+        <option value="SDG" >SDG</option>
+        
+        <option value="SEK" >SEK</option>
+        
+        <option value="SGD" >SGD</option>
+        
+        <option value="SHP" >SHP</option>
+        
+        <option value="SLL" >SLL</option>
+        
+        <option value="SOS" >SOS</option>
+        
+        <option value="SRD" >SRD</option>
+        
+        <option value="STD" >STD</option>
+        
+        <option value="SYP" >SYP</option>
+        
+        <option value="SZL" >SZL</option>
+        
+        <option value="THB" >THB</option>
+        
+        <option value="TJS" >TJS</option>
+        
+        <option value="TMT" >TMT</option>
+        
+        <option value="TND" >TND</option>
+        
+        <option value="TOP" >TOP</option>
+        
+        <option value="TRY" >TRY</option>
+        
+        <option value="TTD" >TTD</option>
+        
+        <option value="TWD" >TWD</option>
+        
+        <option value="TZS" >TZS</option>
+        
+        <option value="UAH" >UAH</option>
+        
+        <option value="UGX" >UGX</option>
+        
+        <option value="USD" >USD</option>
+        
+        <option value="UYU" >UYU</option>
+        
+        <option value="UZS" >UZS</option>
+        
+        <option value="VEF" >VEF</option>
+        
+        <option value="VND" >VND</option>
+        
+        <option value="VUV" >VUV</option>
+        
+        <option value="WST" >WST</option>
+        
+        <option value="XAF" >XAF</option>
+        
+        <option value="XCD" >XCD</option>
+        
+        <option value="XDR" >XDR</option>
+        
+        <option value="XOF" >XOF</option>
+        
+        <option value="XPF" >XPF</option>
+        
+        <option value="YER" >YER</option>
+        
+        <option value="ZAR" >ZAR</option>
+        
+        <option value="ZMW" >ZMW</option>
+        
+      </select>
+    </div>
+  </div>
+</div>
+
+
+
+<div class="medium-3 columns">
+<button onclick="getCurrencyUsingJQuery()" class="button postfix">Convert</button>
+</div>
+
+<div class="medium-3 columns">
+<input type="text" id="CURR_VAL" readonly placeholder="Press Convert button" style="background-color: #eee; font-weight: bold;" />
+</div>
+
+</div>
+
+<h3>Rate Limits of the Free API</h3>
+<p>
+<div>Conversion Pairs per Request: 2</div>
+<div style="margin-top: 6px;">Number of Requests per Hour: 100</div>
+<div style="margin-top: 6px;">Date Range in History: 8 Days</div>
+<div style="margin: 6px 0;">Allowed Back in History: 1 Year(s)</div>
+</p>
+
+<h3>More About Foreign Exchange API</h3>
+
+<p>Free Currency Converter API started in year 2014, it's now 2018 and we're up ever since. It offers free web services for developers to convert one currency to another. You are free to use this for personal or commercial application however it offers no warranty (See license below for more information).</p>
+
+<p>Currency values are updated every 60 minutes. If you need a realtime web service or a service that updates more frequently, you may checkout the premium service at <a href="https://www.currencyconverterapi.com">CurrencyConverterAPI.com</a>.</p>
+
+<p>Convert queries accepts a maximum of 2 conversion parameters to avoid abuse of the service and to help maintain the health of the web services. If you need more than the limit or if you need a large amount of requests, you may <a href="/contact">contact me</a> for more information or check the faster and production-ready server at <a href="https://www.currencyconverterapi.com">CurrencyConverterAPI.com</a>.</p> 
+
+
+<h3>This site is powered by coffee</h3>
+
+<div class="row">
+  <div class="large-12 columns">
+    If you appreciate this site, please support it by registering to the premium service. Check the <a href="https://www.currencyconverterapi.com/pricing">pricing</a> for more information.
+  </div>
+</div>
+
+
+
+<br/>
+<h3>Featured websites who use this service</h3>
+
+<div class="feature-box">
+<p class="title"><a href="http://www.pesobility.com">Pesobility.com</a></p>
+<a href="http://www.pesobility.com"><img border="0" src="//4.bp.blogspot.com/--ioN1UfPPYM/UvLra9xvudI/AAAAAAAANVw/9u5muYRBIes/s1600/Screen+Shot+2014-02-06+at+9.54.04+AM.png" height="260" width="400" /></a>
+<p class="desc">Finance awareness website.</p>
+
+
+</div>
+
+<p>Please, please, please do not abuse the free service as many other people are using it (see <a href="/terms-of-service">terms and conditions</a> of using the free service). Be considerate or you will be blacklisted from the free service. Please consider the premium service at <a href="https://www.currencyconverterapi.com">currencyconverterapi.com</a> if you need many requests in an hour. The limit for this service is 100 per hour.
+</p>
+
+<p>Do you use this service? <a href="/contact">Tell me</a> about it and I might feature it here!
+</p>
+
+<h3><a name="license" class="anchor" href="#license"><span class="octicon octicon-link"></span></a>License</h3>
+
+<p>I don't know how to license web services, so below is the closest terms I could think of. In short, this service is free even for commercial use. Using the services here will cost you nothing, $0; it is free as in beer! If you appreciate this, you could <a href="/buy-me-coffee">buy me a coffee</a>.</p>
+
+<p>The MIT License (MIT)</p>
+
+<p>Copyright (c) 2016 Manny</p>
+
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:</p>
+
+<p>The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.</p>
+
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
 
 
   </div>
@@ -203,21 +937,23 @@ Please note that the services here are provided as is and without warranty (See 
 <div class="footer">
   <div class="row">
   <div class="large-12 columns">
-    <ul class="menu">
-  <li><a href="/">Home</a></li>
-   <li><a href="/docs">Documentation</a></li>
+    
+<ul class="menu">
+  <li><a href="https://www.currencyconverterapi.com">Home</a></li>
+   <li><a href="https://www.currencyconverterapi.com/docs">Documentation</a></li>
    <li><a href="https://free.currencyconverterapi.com">Free Version</a></li>
-   <li><a href="/pricing">Pricing</a></li>
+   <li><a href="https://www.currencyconverterapi.com/pricing">Pricing</a></li>
    <li><a href="https://blog.currencyconverterapi.com">Blog</a></li>
-  <li><a href="/contact">Contact &amp; Support</a></li>
+  <li><a href="https://www.currencyconverterapi.com/contact">Contact &amp; Support</a></li>
   
 
 
    <li>|</li>
    
-   <li><a href="/login">Login</a></li>
+   <li><a href="https://www.currencyconverterapi.com/dev">Login</a></li>
    
 </ul>
+
 
 
        <ul class="menu clearfix" style="float:right;">
@@ -233,6 +969,12 @@ Please note that the services here are provided as is and without warranty (See 
 <script src="/js/foundation.min.js"></script>
 <script>
   $(document).foundation();
+</script>
+
+<script type="text/javascript">
+var addthisScript = document.createElement('script');
+addthisScript.setAttribute('src', '//s7.addthis.com/js/300/addthis_widget.js#domready=1')
+document.body.appendChild(addthisScript)
 </script>
 
 
